@@ -38,7 +38,7 @@ class BlockStore extends Module
 		$this->need_instance = 0;
 
 		$this->bootstrap = true;
-		parent::__construct();	
+		parent::__construct();
 
 		$this->displayName = $this->l('Store locator block');
 		$this->description = $this->l('Displays an image link to PrestaShop\'s store locator feature.');
@@ -50,21 +50,10 @@ class BlockStore extends Module
 		if (!parent::install())
 			return false;
 
-		// Hook the module either on the left or right column
-		$theme = new Theme(Context::getContext()->shop->id_theme);
-		if ((!$theme->default_right_column || !$this->registerHook('rightColumn'))
-			&& (!$theme->default_left_column || !$this->registerHook('leftColumn')))
-		{
-			// If there are no colums implemented by the template, throw an error and uninstall the module
-			$this->_errors[] = $this->l('This module needs to be hooked in a column, but your theme does not implement one.');
-			parent::uninstall();
-			return false;
-		}
-
 		if (file_exists(dirname(__FILE__).'/store.jpg'))
 			Configuration::updateValue('BLOCKSTORE_IMG', 'store.jpg');
 
-		// Hook the module at the end on the header, only if it has been hooked 
+		// Hook the module at the end on the header, only if it has been hooked
 		return $this->registerHook('header');
 	}
 
@@ -92,7 +81,7 @@ class BlockStore extends Module
 					FROM '._DB_PREFIX_.'store s'
 					.Shop::addSqlAssociation('store', 's');
 			$total = Db::getInstance()->getValue($sql);
-			
+
 			if ($total <= 0)
 				return;
 		}
@@ -147,7 +136,7 @@ class BlockStore extends Module
 	{
 		return $this->postProcess().$this->renderForm();
 	}
-	
+
 	public function renderForm()
 	{
 		$fields_form = array(
@@ -175,7 +164,7 @@ class BlockStore extends Module
 				)
 			),
 		);
-		
+
 		$helper = new HelperForm();
 		$helper->show_toolbar = false;
 		$helper->table =  $this->table;
@@ -194,7 +183,7 @@ class BlockStore extends Module
 
 		return $helper->generateForm(array($fields_form));
 	}
-	
+
 	public function getConfigFieldsValues()
 	{
 		if (!($languages = Language::getLanguages(true)))
